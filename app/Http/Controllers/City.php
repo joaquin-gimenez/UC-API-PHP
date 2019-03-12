@@ -8,34 +8,36 @@ use Illuminate\Http\Request;
 class CityController extends Controller
 {
 
-    public function showAllCities()
+    public function getAllCities()
     {
-        return response()->json(City::all());
+        return response()->json([ "cities" => City::all() ]);
+    }
+    
+    public function getCityDetails($id)
+    {
+        $city = City::find($id);
+        $city["places"] = $city->places; 
+        return response()->json([ "cityDetails" => $city ]);
     }
 
-    public function showOneCity($id)
-    {
-        return response()->json(City::find($id));
-    }
+    // public function create(Request $request)
+    // {
+    //     $city = City::create($request->all());
 
-    public function create(Request $request)
-    {
-        $city = City::create($request->all());
+    //     return response()->json($city, 201);
+    // }
 
-        return response()->json($city, 201);
-    }
+    // public function update($id, Request $request)
+    // {
+    //     $city = City::findOrFail($id);
+    //     $city->update($request->all());
 
-    public function update($id, Request $request)
-    {
-        $city = City::findOrFail($id);
-        $city->update($request->all());
+    //     return response()->json($city, 200);
+    // }
 
-        return response()->json($city, 200);
-    }
-
-    public function delete($id)
-    {
-        City::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
-    }
+    // public function delete($id)
+    // {
+    //     City::findOrFail($id)->delete();
+    //     return response('Deleted Successfully', 200);
+    // }
 }

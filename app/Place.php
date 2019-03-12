@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class Place extends Model
 {
 
-    protected $table = 'city';
+    protected $table = 'place';
+
     
     const CREATED_AT = 'createdate';
     const UPDATED_AT = 'lastupdated';
@@ -18,7 +19,7 @@ class City extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'countryname', 'lat', 'lng', 'thumburl', 'description', 'heroimage', 'budget', 'besttime', 'language', 'population', 'traveladvice', 'currency', 'tour_price'
+        'name', 'description', 'numimages', 'timings', 'heroimage', 'herovideo'
     ];
 
      //protected $guarded = ['createdate', 'lastupdated']; 
@@ -30,7 +31,7 @@ class City extends Model
      */
      protected $hidden = ['createdate', 'lastupdated'];
 
-     public function places(){
-         return $this->hasMany('App\Place', 'cityid');
-     }
+     public function city(){
+        return $this->belongsTo('App\City');
+    }
 }
