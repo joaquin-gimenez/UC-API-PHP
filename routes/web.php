@@ -19,9 +19,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('cities/getAllCities',  ['uses' => 'CityController@getAllCities']);  
     $router->get('cities/getCityDetails/{id}', ['uses' => 'CityController@getCityDetails']);
-    $router->post('city', ['uses' => 'CityController@create']);
-    $router->delete('city/{id}', ['uses' => 'CityController@delete']);
-    $router->put('city/{id}', ['uses' => 'CityController@update']);
+    // $router->post('city', ['uses' => 'CityController@create']);
+    // $router->delete('city/{id}', ['uses' => 'CityController@delete']);
+    // $router->put('city/{id}', ['uses' => 'CityController@update']);
 
     $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
     $router->get('places/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
