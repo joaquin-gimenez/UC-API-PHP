@@ -25,6 +25,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //4
     $router->get('cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
     //5
+    $router->get('cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlacesIdByCity']);
     //6
     //7
     //8

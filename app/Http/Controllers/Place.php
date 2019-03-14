@@ -21,6 +21,10 @@ class PlaceController extends Controller
     function getPlacesByCity($id){
         return response()->json( Place::where("cityid",$id)->get() );   
     }
+    //5
+    function getPlacesIdByCity($id){
+        return response()->json( Place::where("id",$id) ->get()[0] );
+    }
 
 
 
