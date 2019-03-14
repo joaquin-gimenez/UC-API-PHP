@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -16,7 +17,7 @@ class AccountController extends Controller
     public function register(Request $request)
     {
         if(Account::where("email", $request->email)->count() == 0){
-          $request->request->add([ "userid" => 23 ]);
+          $request->request->add([ "userid" => Uuid::uuid1()->toString() ]);
           $account = Account::create($request->all());
           return response()->json([ "result" => $account ], 200);
         }else {
