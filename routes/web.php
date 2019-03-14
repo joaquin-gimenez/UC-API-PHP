@@ -25,4 +25,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
     $router->get('places/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
+
+    $router->put('account', ['uses' => 'AccountController@register']);
   });
