@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PlaceController extends Controller
 {
-
+    
     public function getAllPlaces()
     {
         return response()->json([ "places" => Place::all() ]);
@@ -17,6 +17,12 @@ class PlaceController extends Controller
     {
         return response()->json([ "placeDetails" => Place::find($id) ]);
     }
+    //4
+    function getPlacesByCity($id){
+        return response()->json( Place::where("cityid",$id)->get() );   
+    }
+
+
 
     // public function create(Request $request)
     // {
