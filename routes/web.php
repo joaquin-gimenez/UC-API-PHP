@@ -25,10 +25,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //4
     $router->get('cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
     //5
-    $router->get('cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlacesIdByCity']);
+    $router->get('cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
     //6
+    //create Media controller
     //7
+    //????????
     //8
+    $router->get('cities/search/{search}',['uses'=> 'CityController@search']);
+
 
 
     // $router->post('city', ['uses' => 'CityController@create']);

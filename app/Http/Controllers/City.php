@@ -20,6 +20,11 @@ class CityController extends Controller
         $city["places"] = $city->places; 
         return response()->json( $city );
     }
+    //8
+    function search($search){
+        return response()->json(City::where('name','like', "%{$search}%")
+        ->orwhere('description','like',"%{$search}%") -> get());
+    }
 
 
     
