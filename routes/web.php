@@ -43,4 +43,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     
     $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
     $router->get('cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
+
+    $router->get('account', ['uses' => 'AccountController@getProfile']);
+    $router->put('account', ['uses' => 'AccountController@register']);
+    $router->post('account', ['uses' => 'AccountController@login']);
+    $router->post('account/update', ['uses' => 'AccountController@updateProfile']);
+    
   });
