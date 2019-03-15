@@ -33,4 +33,5 @@ class City extends Model
      public function places(){
          return $this->hasMany('App\Place', 'cityid');
      }
-}
+
+     }

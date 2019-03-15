@@ -16,18 +16,33 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
+    //Done
+    //1
+    $router->get('cities',  ['uses' => 'CityController@getAllCities']);  
+    //2
+    $router->get('cities/{id}', ['uses' => 'CityController@getCityDetails']);
+    //3
+    //4
+    $router->get('cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
+    //5
+    $router->get('cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlacesIdByCity']);
+    //6
+    //7
+    //8
 
-    $router->get('cities/getAllCities',  ['uses' => 'CityController@getAllCities']);  
-    $router->get('cities/getCityDetails/{id}', ['uses' => 'CityController@getCityDetails']);
+
     // $router->post('city', ['uses' => 'CityController@create']);
     // $router->delete('city/{id}', ['uses' => 'CityController@delete']);
     // $router->put('city/{id}', ['uses' => 'CityController@update']);
+    //In Process
 
+    
     $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
-    $router->get('places/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
+    $router->get('cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
 
     $router->get('account', ['uses' => 'AccountController@getProfile']);
     $router->put('account', ['uses' => 'AccountController@register']);
     $router->post('account', ['uses' => 'AccountController@login']);
     $router->post('account/update', ['uses' => 'AccountController@updateProfile']);
+    
   });
