@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Account extends Model
+class Token extends Model
 {
 
-    protected $table = 'account';
+    protected $table = 'token';
     
     const CREATED_AT = 'createdate';
     const UPDATED_AT = null;
@@ -18,7 +18,7 @@ class Account extends Model
      * @var array
      */
     protected $fillable = [
-        'userid', 'email', 'full_name', 'password'
+        'userid', 'token', 'userid'
     ];
 
     /**
@@ -26,5 +26,5 @@ class Account extends Model
      *
      * @var array
      */
-     protected $hidden = ['id', 'createdate'];
+     protected $hidden = ['id', 'createdate', 'password'];
 }
