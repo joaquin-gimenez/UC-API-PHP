@@ -22,8 +22,24 @@ class CityController extends Controller
     }
     //8
     function search($search){
-        return response()->json(City::where('name','like', "%{$search}%")
-        ->orwhere('description','like',"%{$search}%") -> get());
+            $results =response()->json([City::where('name','like', "%{$search}%")
+            ->orwhere('description','like',"%{$search}%")->get()]);
+
+            return ['currentPage' => 1,
+             'nextPage' => 2,
+             'count' => count($results),
+            'results' => $results];
+            // $results= response()->json(City::where('name','like', "%{$search}%")
+            // ->orwhere('description','like',"%{$search}%")->get());
+            // //var_dump($results);
+            // $json=[];
+            // foreach($results as $query){
+            //     array_add($json,$query);
+            // }
+            // var_dump($json);
+    }
+    public function getCityByName($name){
+        return response()->json( City::where("name",$name)->get());
     }
 
 

@@ -17,23 +17,23 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     //Done
-    //1
+    
     $router->get('cities',  ['uses' => 'CityController@getAllCities']);  
-    //2
+    
     $router->get('cities/{id}', ['uses' => 'CityController@getCityDetails']);
-    //3
-    //4
+    
     $router->get('cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
-    //5
+    
     $router->get('cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
-    //6
-    //create Media controller
-    //7
-    //????????
-    //8
+    
+    $router->get('cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
+    
+    $router->get('cities/{cityId}/places/{placeId}/media/{type}', ['uses'=> 'MediaController@getMediaByType']);
+
     $router->get('cities/search/{search}',['uses'=> 'CityController@search']);
 
-
+    $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
+    $router->get('cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
 
     // $router->post('city', ['uses' => 'CityController@create']);
     // $router->delete('city/{id}', ['uses' => 'CityController@delete']);
@@ -41,6 +41,5 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //In Process
 
     
-    $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
-    $router->get('cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
+
   });
