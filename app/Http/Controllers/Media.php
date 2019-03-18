@@ -8,11 +8,19 @@ use Illuminate\Http\Request;
 class MediaController extends Controller
 {
 
-    public function getMediaByType($cityId,$placeId,$type){
+    public function getPlaceByType($cityId,$placeId,$type){
         return response()->json(Media::where('type',$type)
-        ->where('cityid',$cityId)
-        ->where('placeid',$placeId)
-        ->get());
+            ->where('cityid',$cityId)
+            ->where('placeid',$placeId)
+            ->get());
+    }
+
+    public function getCityByType($cityId,$type){
+        return response()->json(Media::where('type',$type)
+            ->where('cityid',$cityId)
+            ->get());
+
+
     }
 
 }

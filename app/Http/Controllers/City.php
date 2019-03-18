@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\City;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CityController extends Controller
 {
@@ -11,7 +12,17 @@ class CityController extends Controller
     //1
     public function getAllCities()
     {
-        return response()->json([ City::all() ]);
+        try{
+            return response()->json([ City::all() ]);
+        }
+        catch(ModelNotFoundException $exception){
+            return response()->json(['message' => 'Error',
+            "errorCode" => 'OTHER ERROR',
+            'status' => 500]
+            ,500);
+
+
+        }
     }
     //2
     public function getCityDetails($id)
@@ -21,50 +32,23 @@ class CityController extends Controller
         return response()->json( $city );
     }
     //8
-    function search($search){
-            $results =response()->json([City::where('name','like', "%{$search}%")
-            ->orwhere('description','like',"%{$search}%")->get()]);
-
-            return ['currentPage' => 1,
-             'nextPage' => 2,
-             'count' => count($results),
-            'results' => $results];
-            // $results= response()->json(City::where('name','like', "%{$search}%")
-            // ->orwhere('description','like',"%{$search}%")->get());
-            // //var_dump($results);
-            // $json=[];
-            // foreach($results as $query){
-            //     array_add($json,$query);
-            // }
-            // var_dump($json);
+    function search(Request $request){
+            $search = $request->search;
+            $page = $request->page; 
+            $results =response()->json([
+                City::where('name','like', "%{$search}%"    )->orwhere('description','like',"%{$search}%")->get()
+            ]);
+            return [
+                'currentPage' => $page,
+                'nextPage' => $page+1,
+                'count' => count($results->original[0]),
+                'results' => $results->original[0]
+            ];
     }
-    public function getCityByName($name){
+    public function getCityByName(Request $request){
+        $name = $request->name;
         return response()->json( City::where("name",$name)->get());
     }
-
-
-    
-    // public function getCity (Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'properties'=>'required',
-    //         'lat'=>'required',
-    //         'lng'=>'required',
-    //         'createdate'=>'required',
-    //         'lastupdate'=>'required',
-    //         'heroimage'=>'required',
-    //         'besttime'=>'required',
-    //         'language'=>'required',
-    //         'population'=>'required',
-    //         'currency'=>'required',
-    //         'tour_price'=>'required',
-    //     ]);
-
-    //     $city =  City::create($request->all());
-
-    //     return response()->json($city,201);
-
-    // }
 
     // public function create(Request $request)
     // {
