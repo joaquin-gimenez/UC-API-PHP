@@ -18,7 +18,7 @@ class Token extends Model
      * @var array
      */
     protected $fillable = [
-        'userid', 'token', 'userid'
+        'userid', 'token', 'createdate'
     ];
 
     /**
@@ -26,5 +26,5 @@ class Token extends Model
      *
      * @var array
      */
-     protected $hidden = ['id', 'createdate', 'password'];
+     protected $hidden = ['id'];
 }
