@@ -5,47 +5,63 @@ namespace App\Http\Controllers;
 use App\Place;
 use Illuminate\Http\Request;
 
-class PlaceController extends Controller
-{
+class PlaceController extends Controller {   
     
-    public function getAllPlaces()
-    {
-        return response()->json([ "places" => Place::all() ]);
-    }
-    
-    public function getPlaceDetails($id)
-    {
-        return response()->json([ "placeDetails" => Place::find($id) ]);
-    }
-    //4
-    function getPlacesByCity($id){
-        return response()->json( Place::where("cityid",$id)->get() );   
-    }
-    //5
-    function getPlace($id){
-        return response()->json( Place::where("id",$id) ->get()[0] );
-    }
 
+    // --------------------Get All Places of a City -----------------------
+    function getPlacesByCity($id) {
+        
+        try{
+            $result = response()->json( Place::where("cityid",$id)->get() );
+            
+            if(count($result->original)>0) {
+                return $result;
+            }
+            return response()->json([
+                'message' => 'No city was found with the provided id',
+                'error' => 'OTHER ERORR',
+                'status' => 404],
+                404);
+            }catch(\Exception $exception) {
+                return response()->json([
+                    'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
+                    'error' => 'OTHER ERORR',
+                    'status' => 500],
+                    500);
+                    
+                }
+            }
 
+            // --------------------Get a place from a city -----------------------
 
-    // public function create(Request $request)
-    // {
-    //     $place = Place::create($request->all());
-
-    //     return response()->json($place, 201);
-    // }
-
-    // public function update($id, Request $request)
-    // {
-    //     $place = Place::findOrFail($id);
-    //     $place->update($request->all());
-
-    //     return response()->json($place, 200);
-    // }
-
-    // public function delete($id)
-    // {
-    //   Place::findOrFail($id)->delete();
-    //     return response('Deleted Successfully', 200);
-    // }
-}
+            //cityId is not required and the place id is unique therefore cityid is not used
+            function getPlace($id) {
+                
+                try {
+                    $result = response()->json( Place::find($id));
+                    
+                    if(count($result->original)>0){
+                        
+                        return $result;
+                        
+                    }
+                    else {
+                        return response()->json([
+                            'message' => 'No place with the id provided was found',
+                            'error' => 'OTHER ERORR',
+                            'status' => 404],
+                            404);
+                        }
+                        
+                    }catch(\Exception $exception) {
+                        return response()->json([
+                            'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
+                            'error' => 'OTHER ERORR',
+                            'status' => 500],
+                            500);
+                            
+                        }
+                        
+                        
+                    }
+                }

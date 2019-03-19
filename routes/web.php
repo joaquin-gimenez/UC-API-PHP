@@ -22,7 +22,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('cities/search',['uses' => 'CityController@search']);
 
-    $router->get('cities/current',['uses' => 'CityController@getCityByName' ]);
+    $router->get('cities/current',['uses' => 'CityController@getCurrentCity' ]);
     
     $router->get('cities/{id}', ['uses' => 'CityController@getCityDetails']);
     

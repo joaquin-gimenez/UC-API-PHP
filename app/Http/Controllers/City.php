@@ -4,70 +4,133 @@ namespace App\Http\Controllers;
 
 use App\City;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class CityController extends Controller
-{
-
-    //1
-    public function getAllCities()
-    {
-        try{
+class CityController extends Controller {
+    
+    // ---------------- Get All City ----------------
+    public function getAllCities() {
+        try {
+            
             return response()->json([ City::all() ]);
+            
+        }catch(\Exception  $exception) {
+            
+            return response()->json([
+                'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
+                "errorCode" => 'OTHER ERROR',
+                'status' => 500]
+                ,500);
+            }
         }
-        catch(ModelNotFoundException $exception){
-            return response()->json(['message' => 'Error',
-            "errorCode" => 'OTHER ERROR',
-            'status' => 500]
-            ,500);
-
-
-        }
-    }
-    //2
-    public function getCityDetails($id)
-    {    
-        $city = City::find($id);
-        $city["places"] = $city->places; 
-        return response()->json( $city );
-    }
-    //8
-    function search(Request $request){
-            $search = $request->search;
-            $page = $request->page; 
-            $results =response()->json([
-                City::where('name','like', "%{$search}%"    )->orwhere('description','like',"%{$search}%")->get()
-            ]);
-            return [
-                'currentPage' => $page,
-                'nextPage' => $page+1,
-                'count' => count($results->original[0]),
-                'results' => $results->original[0]
-            ];
-    }
-    public function getCityByName(Request $request){
-        $name = $request->name;
-        return response()->json( City::where("name",$name)->get());
-    }
-
-    // public function create(Request $request)
-    // {
-    //     $city = City::create($request->all());
-
-    //     return response()->json($city, 201);
-    // }
-
-    // public function update($id, Request $request)
-    // {
-    //     $city = City::findOrFail($id);
-    //     $city->update($request->all());
-
-    //     return response()->json($city, 200);
-    // }
-
-    // public function delete($id)
-    // {
-    //     City::findOrFail($id)->delete();
-    //     return response('Deleted Successfully', 200);
-    // }
-}
+        
+        // ---------------- Get City Details ----------------
+        
+        public function getCityDetails($id) {    
+            
+            try {
+                $city = City::findOrFail($id);
+                $city["places"] = $city->places; 
+                
+                return response()->json( $city );
+                
+            }catch(\Exception $exception) {
+                
+                return response()->json([
+                    'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
+                    'error' => 'OTHER ERORR',
+                    'status' => 500],
+                    500);
+                }
+            }
+            
+            
+            // ---------------- Search ----------------    
+            
+            public function search(Request $request) {
+                
+                $page = $request->page; 
+                $search = $request->search;
+                
+                try {
+                    
+                    $results =response()->json([City::where( 'name','like', "%{$search}%" )->get()]);
+                    
+                    if( strlen($search)>0 && count($results->original[0])>0 ) {
+                        
+                        return [
+                            'currentPage' => $page,
+                            'nextPage' => count($results->original[0]) == 0 ? null : $page + 1,
+                            'count' => count($results->original[0]),
+                            'results' => $results->original[0]
+                        ];
+                    }
+                    else {
+                        return response()->json([
+                            'message' => 'Didn\'t find anything with this keyword',
+                            'error' => 'OTHER ERORR',
+                            'status' => 404],
+                            404);
+                        }
+                        
+                    }catch(\Exception $exception) {
+                        
+                        return response()->json([
+                            'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
+                            'error' => 'OTHER ERORR',
+                            'status' => 500],
+                            500);
+                            
+                        }
+                        
+                    }
+                    
+                    // ---------------- Get Current City ----------------  
+                    
+                    public function getCurrentCity(Request $request) {
+                        try{
+                            $name;
+                            
+                            if (isset($_SERVER['HTTP_X_AKAMAI_EDGESCAPE'])) {
+                                $matches = [];
+                                preg_match_all("/([^,=]+)=([^,=]+)/", $_SERVER['HTTP_X_AKAMAI_EDGESCAPE'], $matches);
+                                $edgescape = array_combine($matches[1], $matches[2]);
+                                foreach ($edgescape as $key => $value) {
+                                    
+                                    define("EDGESCAPE_" . strtoupper( $key ), $value);
+                                    if($key=='city'){
+                                        $name = $value;
+                                    }
+                                }
+                            }
+                            
+                            $results = response()->json(City::where('name',$name)->get());
+                            
+                            if(count($results->original)==0){
+                                return response()->json([
+                                    'message' => 'No city found',
+                                    'error' => 'OTHER ERORR',
+                                    'status' => 404],
+                                    404);
+                                    
+                                }
+                                
+                                else{
+                                    return $results;
+                                }
+                                
+                            }catch(\Exception $exception) {
+                                
+                                return response()->json([
+                                    'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
+                                    'error' => 'OTHER ERORR',
+                                    'status' => 500],
+                                    500);
+                                    
+                                    
+                                    
+                                    
+                                }
+                                
+                            }
+                        }
+                        
