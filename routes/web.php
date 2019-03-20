@@ -15,14 +15,22 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);  
+$router->get('{apiVersion}/cities/{id}', ['uses' => 'CityController@getCityDetails']);
+$router->get('{apiVersion}/cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
+$router->get('{apiVersion}/cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
+$router->get('{apiVersion}/cities/search/{search}',['uses'=> 'CityController@search']);
+$router->get('{apiVersion}/places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
+$router->get('{apiVersion}/cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
 
-    $router->get('cities/getAllCities',  ['uses' => 'CityController@getAllCities']);  
-    $router->get('cities/getCityDetails/{id}', ['uses' => 'CityController@getCityDetails']);
-    $router->post('city', ['uses' => 'CityController@create']);
-    $router->delete('city/{id}', ['uses' => 'CityController@delete']);
-    $router->put('city/{id}', ['uses' => 'CityController@update']);
+$router->get('{apiVersion}/account', ['uses' => 'AccountController@getProfile']);
+$router->put('{apiVersion}/account', ['uses' => 'AccountController@register']);
+$router->post('{apiVersion}/account', ['uses' => 'AccountController@login']);
+$router->post('{apiVersion}/account/update', ['uses' => 'AccountController@updateProfile']);
 
-    $router->get('places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
-    $router->get('places/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
-  });
+$defaultRoute = '/{route:.*}/';
+$router->get($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->post($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->put($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->delete($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->patch($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
