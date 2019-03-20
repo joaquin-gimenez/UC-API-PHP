@@ -12,58 +12,33 @@ class MediaController extends Controller
     
     public function getPlaceByType($cityId,$placeId,$type) {
         try {
-            $result = response()->json(Media::where('type',$type)
-            ->where('cityid',$cityId)
-            ->where('placeid',$placeId)
-            ->get());
-            //return
+            return response()->json(Media::where('type',$type)->where('cityid',$cityId)->where('placeid',$placeId)->get());;
             
-            if (count($result->original)>0) {
-                return $result;
-            }
-            else {
-                return response()->json([
-                    'message' => 'No place matches the search parameter',
-                    'error' => 'OTHER ERORR',
-                    'status' => 404],
-                    404);
-                }
             }catch(\Exception $exception) {
                 return response()->json([
-                    'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
-                    'error' => 'OTHER ERORR',
-                    'status' => 500],
-                    500);
-                }
+                    'error' => [
+                        'statusCode' => 500
+                        ,'name' => 'Error'
+                        ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
+                        ]
+                    ],500);
             }
+    }
             
             
-            // --------------------Get All Media of a City of the specifiecd Type -----------------------
-            public function getCityByType($cityId,$type) {
-                try{
-                    $result = response()->json(Media::where('type',$type)
-                    ->where('cityid',$cityId)
-                    ->get());
+    // --------------------Get All Media of a City of the specifiecd Type -----------------------
+    public function getCityByType($cityId,$type) {
+        try {
+            return response()->json(Media::where('type',$type)->where('cityid',$cityId)->get());
                     
-                    if (count($result->original)>0) {
-                        return $result;
-                    }
-                    else{
-                        return response()->json([
-                            'message' => 'No city matches the search parameter',
-                            'error' => 'OTHER ERORR',
-                            'status' => 404],
-                            404);
-                        }
-                        
-                    }catch(\Exception $exception) {
-                        return response()->json([
-                            'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists',
-                            'error' => 'OTHER ERORR',
-                            'status' => 500],
-                            500);
-                        }
-                        
-                    }
-                    
-                }
+        }catch(\Exception $exception) {
+            return response()->json([
+                'error' => [
+                    'statusCode' => 500
+                    ,'name' => 'Error'
+                    ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
+                ]
+            ],500);
+        }                        
+    }
+}

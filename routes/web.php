@@ -34,7 +34,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('cities/{cityId}/places/{placeId}/media/{type}', ['uses' => 'MediaController@getPlaceByType']);
 
-
+    
     // $router->post('city', ['uses' => 'CityController@create']);
     // $router->delete('city/{id}', ['uses' => 'CityController@delete']);
     // $router->put('city/{id}', ['uses' => 'CityController@update']);
