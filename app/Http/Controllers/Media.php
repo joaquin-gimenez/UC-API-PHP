@@ -18,7 +18,7 @@ class MediaController extends Controller
                 return response()->json([
                     'error' => [
                         'statusCode' => 500
-                        ,'name' => 'Error'
+                        ,'errorCode' => "OTHER_ERROR"
                         ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                         ]
                     ],500);
@@ -35,7 +35,7 @@ class MediaController extends Controller
             return response()->json([
                 'error' => [
                     'statusCode' => 500
-                    ,'name' => 'Error'
+                    ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
             ],500);

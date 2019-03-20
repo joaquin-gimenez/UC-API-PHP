@@ -18,7 +18,7 @@ class CityController extends Controller {
             return response()->json([
                 'error' => [
                     'status' => 500
-                    ,'name' => "Error"
+                    ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
                 ],500);
@@ -61,7 +61,7 @@ class CityController extends Controller {
             [
             "error" => [
                 "statusCode" => 500,
-                "name" => "Error",
+                'errorCode' => "OTHER_ERROR",
                 "message" => "Something went wrong and we couldn't fulfil this request. Write to us if this persists"
                 ]
             ]
@@ -114,7 +114,7 @@ class CityController extends Controller {
             return response()->json([
                 "error" => [
                     'statusCode' => 500
-                    ,'name' => 'Error'
+                    ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
                 ],500);
@@ -148,7 +148,7 @@ class CityController extends Controller {
             return response()->json([
                 'error' => [
                     'statusCode' => 500
-                    ,'name' => 'Error'
+                    ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
             ],500);
