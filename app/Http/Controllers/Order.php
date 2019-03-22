@@ -50,19 +50,31 @@ class OrderController extends Controller
 
     }
 
-    public function deleteOrder(Request $request, $apiVersion, $orderId)
+    public function deleteOrder(Request $request, $apiVersion, $id)
     {
         if($apiVersion != "v2") {
             return $this->invalidVersion();
         }
+
 
         if($request->header('authorization')) {
             $verifiedToken = $this->verifyToken($request->header('authorization'));
             if(gettype($verifiedToken) == 'array' && isset($verifiedToken['error'])){
                 return response()->json($verifiedToken, 401);
             }else{
-              Order::findOrFail($id)->delete();
-              return response('Deleted Successfully', 200);
+              $order = Order::findOrFail($id);
+              if($order->userid == $verifiedToken->userid){
+                $order->delete();
+                return response('Deleted Successfully', 200);
+              }else{
+                return response()->json([
+                    "error" => [
+                        "message" => 'Incorrect Authentication',
+                        "errorCode" => 'AUTH_INVALID',
+                        "statusCode" => 403
+                    ]
+                ], 403);
+              }
             }
         }else{
           return response()->json([
