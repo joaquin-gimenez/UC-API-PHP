@@ -15,31 +15,26 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
-    
-    
-    $router->get('cities',  ['uses' => 'CityController@getAllCities']);  
 
-    $router->get('cities/search',['uses' => 'CityController@search']);
+$router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);  
+$router->get('{apiVersion}/cities/{id}', ['uses' => 'CityController@getCityDetails']);
+$router->get('{apiVersion}/cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
+$router->get('{apiVersion}/cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
+$router->get('{apiVersion}/cities/current',['uses' => 'CityController@getCurrentCity' ]);
+$router->get('{apiVersion}/cities/search',['uses' => 'CityController@search']);
+$router->get('{apiVersion}/places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
+$router->get('{apiVersion}/cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
+$router->get('{apiVersion}/cities/{cityId}/media/{type}', ['uses' => 'MediaController@getCityByType']);
+$router->get('{apiVersion}/cities/{cityId}/places/{placeId}/media/{type}', ['uses' => 'MediaController@getPlaceByType']);
 
-    $router->get('cities/current',['uses' => 'CityController@getCurrentCity' ]);
-    
-    $router->get('cities/{id}', ['uses' => 'CityController@getCityDetails']);
-    
-    $router->get('cities/{id}/places', ['uses' => 'PlaceController@getPlacesByCity']);
-      
-    $router->get('cities/{cityId}/places/{id}', ['uses' => 'PlaceController@getPlace']);
-    
-    $router->get('cities/{cityId}/media/{type}', ['uses' => 'MediaController@getCityByType']);
+$router->get('{apiVersion}/account', ['uses' => 'AccountController@getProfile']);
+$router->put('{apiVersion}/account', ['uses' => 'AccountController@register']);
+$router->post('{apiVersion}/account', ['uses' => 'AccountController@login']);
+$router->post('{apiVersion}/account/update', ['uses' => 'AccountController@updateProfile']);
 
-    $router->get('cities/{cityId}/places/{placeId}/media/{type}', ['uses' => 'MediaController@getPlaceByType']);
-
-    
-    // $router->post('city', ['uses' => 'CityController@create']);
-    // $router->delete('city/{id}', ['uses' => 'CityController@delete']);
-    // $router->put('city/{id}', ['uses' => 'CityController@update']);
-    //In Process
-
-    
-
-  });
+$defaultRoute = '/{route:.*}/';
+$router->get($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->post($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->put($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->delete($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+$router->patch($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
