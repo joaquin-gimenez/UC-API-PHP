@@ -15,6 +15,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->get('/cities/cart',['uses' => 'CartController@test']);
+
 $router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);  
 $router->get('{apiVersion}/cities/{id}', ['uses' => 'CityController@getCityDetails']);
 $router->get('{apiVersion}/cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);

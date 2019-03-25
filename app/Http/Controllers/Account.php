@@ -212,8 +212,7 @@ class AccountController extends Controller
         }
     }
 
-    private function verifyToken($sentToken) 
-    {
+    private function verifyToken($sentToken) {
         try {
             $token = Token::where('token', $sentToken)->firstOrFail();
             $date = $token->value('createdate');
