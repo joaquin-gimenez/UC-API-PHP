@@ -16,12 +16,12 @@ $router->get('/', function () use ($router) {
 });
 
 
-$router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);  
+$router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);
+$router->get('{apiVersion}/cities/current',['uses' => 'CityController@getCurrentCity']); 
+$router->get('{apiVersion}/cities/search',['uses' => 'CityController@search']); 
 $router->get('{apiVersion}/cities/{id}', ['uses' => 'CityController@getCityDetails']);
 $router->get('{apiVersion}/cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
 $router->get('{apiVersion}/cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
-$router->get('{apiVersion}/cities/current',['uses' => 'CityController@getCurrentCity' ]);
-$router->get('{apiVersion}/cities/search',['uses' => 'CityController@search']);
 $router->get('{apiVersion}/places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
 $router->get('{apiVersion}/cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
 $router->get('{apiVersion}/cities/{cityId}/media/{type}', ['uses' => 'MediaController@getCityByType']);

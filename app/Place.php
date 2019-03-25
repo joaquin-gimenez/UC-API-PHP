@@ -8,7 +8,6 @@ class Place extends Model
 {
 
     protected $table = 'place';
-
     
     const CREATED_AT = 'createdate';
     const UPDATED_AT = 'lastupdated';

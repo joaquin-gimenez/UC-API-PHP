@@ -6,126 +6,144 @@ use App\City;
 use Illuminate\Http\Request;
 
 class CityController extends Controller {
+
+    private function invalidVersion() {
+        return response()->json([
+            "error" => [
+                "name" => "Error", 
+                "message" => "You must supply a valid api version", 
+                "errorCode" => "INVALID_API_VERSION", 
+                "statusCode" => 400
+            ]
+        ], 400);
+    }
     
     // ---------------- Get All Cities ----------------
-    public function getAllCities() {
-        try {
-            return response()->json([ City::all() ]);
-            
-        }catch(\Exception  $exception) {
-            
 
+    public function getAllCities($apiVersion) {
+
+        if($apiVersion != "v2") {
+            return $this->invalidVersion();
+        }
+
+        try {
+            return response()->json( [City::all()] );
+
+        } catch(\Exception  $exception) {
+            
             return response()->json([
                 'error' => [
                     'status' => 500
                     ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
-                ],500);
-
+            ],500);
         }
     }
-        
-    // ---------------- Get City Details ----------------   
-        
-    public function getCityDetails($id) {
+
+    // ---------------- Get City Details ---------------- 
+    public function getCityDetails($id, $apiVersion) {
+
+        if($apiVersion != "v2") {
+            return $this->invalidVersion();
+        }
         if(empty($id)){
             return response()->json([
-                    "error" => [
-                        "statusCode" => 404,
-                        "name" => "Error",
-                        "message" => "No id was supplied. You must supply a city id"
-                        ]
+                "error" => [
+                    "statusCode" => 404,
+                    "name" => "Error",
+                    "message" => "No id was supplied. You must supply a city id"
+                ]
                     
-                    ],404);
-        }    
-                        
+            ],404);
+        }           
         try {
             $city = City::find($id);
             if(count($city) == 0){
                 return response()->json([
-                        "error" => [
-                            "statusCode" => 404,
-                            "name" => "Error",
-                            "message" => "Didn't find anything with this id"
-                        ]
-                    ],404);
+                    "error" => [
+                        "statusCode" => 404,
+                        "name" => "Error",
+                        "message" => "Didn't find anything with this id"
+                    ]
+                ],404);
             }
-
             $city["places"] = $city->places; 
             return response()->json( $city );
                                         
-        }catch(\Exception $exception) {
+        } catch(\Exception $exception) {
                                             
             return response()->json([
-            [
-            "error" => [
-                "statusCode" => 500,
-                'errorCode' => "OTHER_ERROR",
-                "message" => "Something went wrong and we couldn't fulfil this request. Write to us if this persists"
+                "error" => [
+                    "statusCode" => 500,
+                    'errorCode' => "OTHER_ERROR",
+                    "message" => "Something went wrong and we couldn't fulfil this request. Write to us if this persists"
                 ]
-            ]
+                
             ]);
         }
     }
                                             
     // ---------------- Search ----------------    
                                             
-    public function search(Request $request) {
+    public function search(Request $request, $apiVersion) {
+        if($apiVersion != "v2") {
+            return $this->invalidVersion();
+        }
                                                 
         $page = $request->page; 
         $search = $request->search;
                                                 
         try {
 
-        if(empty($search)){
-            return response()->json([
-                [
-                "error" => [
-                    "statusCode" => 404,
-                    "name" => "Error",
-                    "message" => "No keyword was supplied. You must supply a search keyword"
+            if(empty($search)){
+                return response()->json([
+                    "error" => [
+                        "statusCode" => 404,
+                        "name" => "Error",
+                        "message" => "No keyword was supplied. You must supply a search keyword"
                     ]
-                ]
-            ]);                                           
-        }
-                                                        
-        $results =response()->json([City::where( 'name','like', "%{$search}%" )->get()]);
-                                                        
-        if( strlen($search)>0 && count($results->original[0])>0 ) {
-                                                        
-            return [
+                        
+                ]);                                           
+            }                                       
+            $results =response()->json([City::where( 'name','like', "%{$search}%" )->get()]);
+                                                            
+            if( strlen($search) > 0 && count( $results->original[0] ) > 0 ) {
+                                                            
+                return [
                     'currentPage' => $page,
                     'nextPage' => count($results->original[0]) == 0 ? null : $page + 1,
                     'count' => count($results->original[0]),
                     'results' => $results->original[0]
-                    ];
-        }
-        else {
-            return response()->json([
-                "error" =>[
-                    'statusCode' => 404
-                    ,'name' => 'Error'
-                    ,'message' => 'Didn\'t find anything with this keyword'
-                ]
+                ];
+            }
+            else {
+                return response()->json([
+                    "error" =>[
+                        'statusCode' => 404
+                        ,'name' => 'Error'
+                        ,'message' => 'Didn\'t find anything with this keyword'
+                    ]
                 ],404);
-        }
-        }catch(\Exception $exception) {
+            }
+        } catch(\Exception $exception) {
             return response()->json([
                 "error" => [
                     'statusCode' => 500
                     ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
-                ],500);
-                                                            
+            ],500);
         }
     }
                                                     
-     // ---------------- Get Current City ----------------  
-                                                    
-    public function getCurrentCity(Request $request) {
+    // ---------------- Get Current City ----------------  
+                                    
+    public function getCurrentCity(Request $request, $apiVersion) {
     
+        if($apiVersion != "v2") {
+            return $this->invalidVersion();
+        }
         try{
             $name;
                                                             
@@ -140,19 +158,11 @@ class CityController extends Controller {
                     }
                 }
             }
+            return response()->json(City::where('name',$name)->firstOrFail());     
 
-            return response()->json(City::where('name',$name)->get());
-                                                                
-        }catch(\Exception $exception) {
-                                                                
-            return response()->json([
-                'error' => [
-                    'statusCode' => 500
-                    ,'errorCode' => "OTHER_ERROR"
-                    ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
-                ]
-            ],500);
+        } catch(\Exception $exception) {               
+            return response()->json( ['null' => 'null'] );
         }                                                  
     }
-}
-                                                        
+}                                           
+    
