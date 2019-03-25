@@ -41,11 +41,11 @@ class AccountController extends Controller
         }
         try {
             $account = Account::where("email", $request->email)->firstOrFail();
-            if( app('hash')->check($request->input("password"), $account->value('password'), ['rounds' => 10]) ){
+            if( app('hash')->check($request->password, $account->password, ['rounds' => 10]) ){
                 return response()->json([ 
                     "result" => [
                         "status" => "ok", 
-                        "token" => app('hash')->make($account->value('userId')), 
+                        "token" => app('hash')->make($account->userId), 
                         "expires_in_seconds" => $this->ttl
                     ] 
                     ], 200);
