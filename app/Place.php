@@ -8,7 +8,6 @@ class Place extends Model
 {
 
     protected $table = 'place';
-
     
     const CREATED_AT = 'createdate';
     const UPDATED_AT = 'lastupdated';
@@ -33,5 +32,9 @@ class Place extends Model
 
      public function city(){
         return $this->belongsTo('App\City');
+    }
+
+    public function medias(){
+        return $this->hasMany('App\Media','placeid');
     }
 }
