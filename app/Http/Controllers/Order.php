@@ -31,6 +31,7 @@ class OrderController extends Controller
         }
 
         if($request->header('authorization')) {
+          try{
             $verifiedToken = $this->verifyToken($request->header('authorization'));
             if(gettype($verifiedToken) == 'array' && isset($verifiedToken['error'])){
                 return response()->json($verifiedToken, 401);
@@ -38,6 +39,15 @@ class OrderController extends Controller
               $account = Account::where('userid', $verifiedToken->value('userid'))->firstOrFail();
               return response()->json( Order::where('userid', $verifiedToken->value('userid'))->get() );
             }
+          } catch(\Exception $exception) {
+              return response()->json([
+                  "error" => [
+                      "message" => 'Something went wrong and we couldn\'t get the items of the order. Write to us if this persists',
+                      "errorCode" => 'OTHER_ERROR',
+                      'status' => 500
+                  ]
+              ], 500);
+          }
         }else{
           return response()->json([
               "error" => [
@@ -58,6 +68,7 @@ class OrderController extends Controller
 
 
         if($request->header('authorization')) {
+          try{
             $verifiedToken = $this->verifyToken($request->header('authorization'));
             if(gettype($verifiedToken) == 'array' && isset($verifiedToken['error'])){
                 return response()->json($verifiedToken, 401);
@@ -76,6 +87,15 @@ class OrderController extends Controller
                 ], 403);
               }
             }
+          } catch(\Exception $exception) {
+              return response()->json([
+                  "error" => [
+                      "message" => 'Something went wrong and we couldn\'t delete the order. Write to us if this persists',
+                      "errorCode" => 'OTHER_ERROR',
+                      'status' => 500
+                  ]
+              ], 500);
+          }
         }else{
           return response()->json([
               "error" => [
