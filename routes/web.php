@@ -16,6 +16,7 @@ $router->get('/', function () use ($router) {
 });
 
 
+
 $router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);
 $router->get('{apiVersion}/cities/search',['uses' => 'CityController@search']); 
 $router->get('{apiVersion}/cities/{id:[0-9]+}', ['uses' => 'CityController@getCityDetails']);
@@ -36,3 +37,4 @@ $router->post($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->put($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->delete($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->patch($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
+
