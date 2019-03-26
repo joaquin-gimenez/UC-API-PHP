@@ -15,8 +15,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-
-
 $router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);
 $router->get('{apiVersion}/cities/search',['uses' => 'CityController@search']); 
 $router->get('{apiVersion}/cities/{id:[0-9]+}', ['uses' => 'CityController@getCityDetails']);
@@ -31,10 +29,12 @@ $router->put('{apiVersion}/account', ['uses' => 'AccountController@register']);
 $router->post('{apiVersion}/account', ['uses' => 'AccountController@login']);
 $router->post('{apiVersion}/account/update', ['uses' => 'AccountController@updateProfile']);
 
+$router->get('{apiVersion}/orders', ['uses' => 'OrderController@getAllOrders']);
+$router->delete('{apiVersion}/orders/{id:[0-9]+}', ['uses' => 'OrderController@deleteOrder']);
+
 $defaultRoute = '/{route:.*}/';
 $router->get($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->post($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->put($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->delete($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
 $router->patch($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
-
