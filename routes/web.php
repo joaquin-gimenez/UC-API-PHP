@@ -29,7 +29,7 @@ $router->post('{apiVersion}/account', ['uses' => 'AccountController@login']);
 $router->post('{apiVersion}/account/update', ['uses' => 'AccountController@updateProfile']);
 
 $router->get('{apiVersion}/orders', ['uses' => 'OrderController@getAllOrders']);
-$router->delete('{apiVersion}/orders/{id}', ['uses' => 'OrderController@deleteOrder']);
+$router->delete('{apiVersion}/orders/{id:[0-9]+}', ['uses' => 'OrderController@deleteOrder']);
 
 $defaultRoute = '/{route:.*}/';
 $router->get($defaultRoute, ['uses' => 'NotFoundController@pageNotFound']);
