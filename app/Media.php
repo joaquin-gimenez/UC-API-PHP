@@ -10,6 +10,8 @@ class Media extends Model
 
     protected $fillable = ['caption'];
 
+    protected $hidden = ['createdate', 'lastupdated'];
+
     public function city(){
         return $this->belongsTo('App\City');
     }

@@ -15,19 +15,20 @@ class CityController extends Controller {
                 "errorCode" => "INVALID_API_VERSION", 
                 "statusCode" => 400
             ]
-        ], 400);
+        ] ,400);
     }
     
     // ---------------- Get All Cities ----------------
-
     public function getAllCities($apiVersion) {
 
-        if($apiVersion != "v2") {
+        if( $apiVersion != "v2" ) {
             return $this->invalidVersion();
         }
 
         try {
-            return response()->json( [City::all()] );
+
+            return response()->json( City::where('id','>=',0)->select('name','countryname','lat','lng',
+                'thumburl','description','heroimage','tour_price','id')->get(), 200);
 
         } catch(\Exception  $exception) {
             
@@ -37,17 +38,17 @@ class CityController extends Controller {
                     ,'errorCode' => "OTHER_ERROR"
                     ,'message' => 'Something went wrong and we couldn\'t fulfil this request. Write to us if this persists'
                 ]
-            ],500);
+            ] ,500);
         }
     }
 
     // ---------------- Get City Details ---------------- 
     public function getCityDetails($id, $apiVersion) {
 
-        if($apiVersion != "v2") {
+        if( $apiVersion != "v2" ) {
             return $this->invalidVersion();
         }
-        if(empty($id)){
+        if( empty($id) ) {
             return response()->json([
                 "error" => [
                     "statusCode" => 404,
@@ -80,14 +81,13 @@ class CityController extends Controller {
                     "message" => "Something went wrong and we couldn't fulfil this request. Write to us if this persists"
                 ]
                 
-            ]);
+                ] ,200);
         }
     }
-                                            
-    // ---------------- Search ----------------    
-                                            
+
+    // ---------------- Search ----------------                                            
     public function search(Request $request, $apiVersion) {
-        if($apiVersion != "v2") {
+        if( $apiVersion != "v2" ) {
             return $this->invalidVersion();
         }
                                                 
@@ -96,7 +96,7 @@ class CityController extends Controller {
                                                 
         try {
 
-            if(empty($search)){
+            if( empty($search) ) {
                 return response()->json([
                     "error" => [
                         "statusCode" => 404,
@@ -104,9 +104,10 @@ class CityController extends Controller {
                         "message" => "No keyword was supplied. You must supply a search keyword"
                     ]
                         
-                ]);                                           
+                    ] ,200);                                           
             }                                       
-            $results =response()->json([City::where( 'name','like', "%{$search}%" )->get()]);
+            $results =response()->json([City::where( 'name','like', "%{$search}%" )->select('name','countryname','lat','lng'
+                ,'thumburl','description','heroimage','tour_price','id')->get()],200);
                                                             
             if( strlen($search) > 0 && count( $results->original[0] ) > 0 ) {
                                                             
@@ -137,17 +138,16 @@ class CityController extends Controller {
         }
     }
                                                     
-    // ---------------- Get Current City ----------------  
-                                    
+    //---------------- Get Current City ----------------                                
     public function getCurrentCity(Request $request, $apiVersion) {
     
-        if($apiVersion != "v2") {
+        if( $apiVersion != "v2" ) {
             return $this->invalidVersion();
         }
         try{
             $name;
                                                             
-            if (isset($_SERVER['HTTP_X_AKAMAI_EDGESCAPE'])) {
+            if ( isset($_SERVER['HTTP_X_AKAMAI_EDGESCAPE']) ) {
                 $matches = [];
                 preg_match_all("/([^,=]+)=([^,=]+)/", $_SERVER['HTTP_X_AKAMAI_EDGESCAPE'], $matches);
                 $edgescape = array_combine($matches[1], $matches[2]);
@@ -158,7 +158,7 @@ class CityController extends Controller {
                     }
                 }
             }
-            return response()->json(City::where('name',$name)->firstOrFail());     
+            return response()->json([City::where('name',$name)->firstOrFail()]);     
 
         } catch(\Exception $exception) {               
             return response()->json( ['null' => 'null'] );

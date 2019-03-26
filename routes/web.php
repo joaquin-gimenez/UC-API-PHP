@@ -17,15 +17,13 @@ $router->get('/', function () use ($router) {
 
 
 $router->get('{apiVersion}/cities',  ['uses' => 'CityController@getAllCities']);
-$router->get('{apiVersion}/cities/current',['uses' => 'CityController@getCurrentCity']); 
 $router->get('{apiVersion}/cities/search',['uses' => 'CityController@search']); 
-$router->get('{apiVersion}/cities/{id}', ['uses' => 'CityController@getCityDetails']);
-$router->get('{apiVersion}/cities/{id}/places', ['uses'=> 'PlaceController@getPlacesByCity']);
-$router->get('{apiVersion}/cities/{cityId}/places/{id}', ['uses'=> 'PlaceController@getPlace']);
-$router->get('{apiVersion}/places/getAllPlaces',  ['uses' => 'PlaceController@getAllPlaces']);
-$router->get('{apiVersion}/cities/getPlaceDetails/{id}', ['uses' => 'PlaceController@getPlaceDetails']);
-$router->get('{apiVersion}/cities/{cityId}/media/{type}', ['uses' => 'MediaController@getCityByType']);
-$router->get('{apiVersion}/cities/{cityId}/places/{placeId}/media/{type}', ['uses' => 'MediaController@getPlaceByType']);
+$router->get('{apiVersion}/cities/{id:[0-9]+}', ['uses' => 'CityController@getCityDetails']);
+$router->get('{apiVersion}/cities/current',['uses' => 'CityController@getCurrentCity']); 
+$router->get('{apiVersion}/cities/{id:[0-9]+}/places', ['uses'=> 'PlaceController@getPlacesOfCity']);
+$router->get('{apiVersion}/cities/{cityId:[0-9]+}/places/{id:[0-9]+}', ['uses'=> 'PlaceController@getPlaceDetails']);
+$router->get('{apiVersion}/cities/{cityId:[0-9]+}/media[/{type}]', ['uses' => 'MediaController@getAllMediaByCityId']);
+$router->get('{apiVersion}/cities/{cityId:[0-9]+}/places/{placeId:[0-9]+}/media/{type}', ['uses' => 'MediaController@getAllMediaByPlaceId']);
 
 $router->get('{apiVersion}/account', ['uses' => 'AccountController@getProfile']);
 $router->put('{apiVersion}/account', ['uses' => 'AccountController@register']);
