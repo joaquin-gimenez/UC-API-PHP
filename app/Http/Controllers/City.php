@@ -152,7 +152,7 @@ class CityController extends Controller {
                 preg_match_all("/([^,=]+)=([^,=]+)/", $_SERVER['HTTP_X_AKAMAI_EDGESCAPE'], $matches);
                 $edgescape = array_combine($matches[1], $matches[2]);
                 foreach ($edgescape as $key => $value) {                                                
-                    define("EDGESCAPE_" . strtoupper( $key ), $value);
+                    // define("EDGESCAPE_" . strtoupper( $key ), $value);
                     if($key=='city'){
                     $name = $value;
                     }
@@ -161,7 +161,7 @@ class CityController extends Controller {
             return response()->json([City::where('name',$name)->firstOrFail()]);     
 
         } catch(\Exception $exception) {               
-            return response()->json( ['null' => 'null'] );
+            return response()->json(["null" => null]);
         }                                                  
     }
 }                                           
