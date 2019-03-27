@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\Token;
-use App\Account;
 use App\City;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -37,16 +36,7 @@ class OrderController extends Controller
             if(gettype($verifiedToken) == 'array' && isset($verifiedToken['error'])){
                 return response()->json($verifiedToken, 401);
             }else{
-              $account = Account::where('userid', $verifiedToken->value('userid'))->firstOrFail();
-              $orders = Order::where('userid', $verifiedToken->value('userid'))->get();
-
-              foreach ($orders as $order) {
-                $city = City::findOrFail($order->cityid);
-                $order->cityname = $city->name;
-                $order->description = $city->description;
-              }
-
-              return response()->json( $orders );
+              return response()->json( $this->returnOrdersByUserId($verifiedToken->value('userid')) );
             }
           } catch(\Exception $exception) {
               return response()->json([
@@ -85,7 +75,7 @@ class OrderController extends Controller
               $order = Order::findOrFail($id);
               if($order->userid == $verifiedToken->userid){
                 $order->delete();
-                return response('Deleted Successfully', 200);
+                return response()->json( $this->returnOrdersByUserId($verifiedToken->value('userid')) );
               }else{
                 return response()->json([
                     "error" => [
@@ -141,6 +131,19 @@ class OrderController extends Controller
                 ]
             ], 403);
         }
+    }
+
+    private function returnOrdersByUserId($userid)
+    {
+      $orders = Order::where('userid', $userid)->get();
+
+      foreach ($orders as $order) {
+        $city = City::findOrFail($order->cityid);
+        $order->cityname = $city->name;
+        $order->description = $city->description;
+      }
+
+      return $orders;
     }
 
 }
